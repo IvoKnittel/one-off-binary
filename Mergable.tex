@@ -248,7 +248,32 @@ $v_1$ loves $v_2$, but $v_2$ loves $v_3$ etc.
 \end{array}
 \]
 
+\subsection*{Chain resolution}
 
+Above, items $v_{1 ... 3} $ form a chain.  Chains can be of any length. 
+A chain is terminated by a happy Couple.
+However we can reduce this to three cases
+
+\subsubsection{Two Couples}
+A chain of length 2, and termination at both ends, with $m(v_i, v_j)$ written as $(i,j)$
+
+\[
+\begin{array}{c|ccccccc}
+\text{item}  & 1 & 2 & 3 & 4 & 5 & 6&7\\
+\hline
+\text{candidate\_lo} & (0, 1) & (1, 2)! & (2, 3) & (3, 4)  & (4, 5) & (5, 6)!\\
+\text{candidate\_hi} & (1, 2)! & (2, 3) & (3, 4)! & (4, 5)!  & (5, 6)! & (6, 7)
+\end{array}
+\]
+Rule: The items of chain of length 2 are settling into a couple.
+\[
+\begin{array}{c|ccccccc}
+\text{item}  & 1 & 2 & 3 & 4 & 5 & 6&7\\
+\hline
+\text{candidate\_lo} & (0, 1) & (1, 2)! & (2, 3) & (3, 4)!  & (4, 5) & (5, 6)!\\
+\text{candidate\_hi} & (1, 2)! & (2, 3) & (3, 4)! & (4, 5)  & (5, 6)! & (6, 7)
+\end{array}
+\]
 
 \subsubsection{Triples}
 Assuming for now qualities cannot be equal,
@@ -331,4 +356,4 @@ For $t^1_j = -1$,  items are merged according to
 The one-off binary tree demonstrates the utility of merging entities with specific properties and qualities. By defining a merge operation and constructing a binary tree, the structure supports analysis of data aggregation and quality metrics. Future work could explore extensions to other data types and applications.
 
 
-end{document}
+\end{document}
