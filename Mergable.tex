@@ -1,0 +1,334 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{geometry}
+\geometry{a4paper, margin=1in}
+
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}
+
+\usepackage{graphicx}
+\usepackage{caption}
+
+\title{One-off Binary Tree}
+\author{Ivo Knittel}
+\date{11.1.2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document introduces the concept of a one-off binary tree, focusing on entities termed "Mergables". These entities are characterized by specific properties, qualities, and ranges. A merging operation is defined for these entities, enabling the construction of a binary tree. Applications and theoretical insights into the properties of such a structure are discussed.
+\end{abstract}
+
+\tableofcontents
+
+\section{Binary Tree of Mergables}
+
+\subsection*{Mergable}
+\subsubsection*{Data Stucture}
+An entity of type Mergable has:
+\begin{enumerate}
+    \item Properties 
+    \item A quality in $[0,1]$, where $0$ represents the worst quality and $1$ represents perfect quality
+    \item A linear range $[\text{lo}, \text{hi}]$ in $[0, 2^M]$, with $\text{lo} \leq \text{hi}$
+\end{enumerate}
+
+ The width of the item $w =\text{hi} -  \text{lo}$.
+
+\subsubsection*{Neighbors}
+
+Two Mergables $v, w$ are neighbors if:
+\[
+\text{hi}(v) + 1 = \text{lo}(w)
+\]
+
+\subsubsection*{Merge}
+There exists a merge function:
+\[
+\text{merge}: v, w  \text{  Mergable}, \text{ and neighbors} \rightarrow u  \text{  Mergable}
+\]
+
+with  $\text{lo}(u)=\text{lo}(v)$ and $\text{hi}(u)=\text{hi}(w)$
+
+The merge is associative:
+\[
+\text{merge} (v_1, \text{merge}(v_2, v_3)) =  \text{merge} (\text{merge}(v_1, v_2), v_3) 
+\]
+
+\subsection*{The Binary Tree of Mergables}
+
+With mergables:
+\begin{align*}
+    v^0_j, & \quad j = 0, \dots 2^M - 1
+\end{align*}
+
+there are also:
+\begin{align*}
+    v^1_j, & \quad j = 0, \dots 2^{M-1} - 1
+\end{align*}
+
+with:
+\[
+v^1_j = \text{merge}(v^0_{2j}, v^0_{2j+1})
+\]
+
+and end index $e^g = 2^{M-g} - 1$.
+
+In general, for $g = 1, \dots M$:
+\begin{align*}
+    v^{g+1}_j, & \quad j = 0, \dots 2^{M-g} - 1
+\end{align*}
+
+with:
+\[
+v^{g+1}_j = \text{merge}(v^g_{2j}, v^g_{2j+1})
+\]
+
+\subsection*{Example}
+
+\subsubsection*{Properties}
+\begin{itemize}
+    \item $\Sigma x$: Real number
+    \item $\Sigma x^2$: Real number
+    \item $n$: Integer
+    \item $\text{quality}$: Real number
+\end{itemize}
+
+For $v^0_j$, the properties are:
+\begin{align*}
+    \Sigma x & = v^0_j \\
+    \Sigma x^2 & = (v^0_j)^2 \\
+    n & = 1 \\
+    \text{quality} & = \text{undefined}
+\end{align*}
+
+\subsubsection*{Merge Function}
+
+For $\text{merge}(v, w) \rightarrow u$:
+\begin{align*}
+    u_{\Sigma x} & = v_{\Sigma x} + w_{\Sigma x} \\
+    u_{\Sigma x^2} & = v_{\Sigma x^2} + w_{\Sigma x^2} \\
+    \text{error} & = (\Sigma x^2 / n - (\Sigma x / n)^2) / (\Sigma x / n)^2
+\end{align*}
+
+\subsubsection*{Best Quality (Maximum Equality)}
+ $x_j \quad j = 0...(n-1)$ with $x_j = 1$:
+\begin{align*}
+    \Sigma x &  = n \\
+    \Sigma x^2 & = n \\
+    \Sigma x^2 / n & = 1 \\
+    \Sigma x / n & = 1 \\
+    \text{error} & = 0
+\end{align*}
+
+\subsubsection*{Worst Quality (Maximum Inequality)}
+ $x_j \quad j = 0...(n-1)$ with $x_0 = 1$ , else $x_j = 0 $:
+\begin{align*}
+    \Sigma x &  = n \\
+    \Sigma x^2 & = n^2 \\
+    \Sigma x / n & = 1 \\
+    \Sigma x^2 / n & = n \\
+    \text{error} & = n - 1 \\
+\end{align*}
+
+\subsubsection*{Quality}
+     with 
+\[ 
+\text{quality}  = ((n-1) - \text{error}) / (n-1),
+\]
+the best quality value is indeed $=1$, and the worst quality $=0$.
+\section{One-off Binary Tree}
+
+The properties of the One-off Binary Tree are
+\begin{itemize}
+    \item The overall qualities in the binary tree can be improved by some freedom in the merging of items.
+    \item The binary tree topology is preserved, to leverage the algorithms based on it.
+\end{itemize}
+
+\subsection*{One-off shifts}
+At the base of that tree are the same Mergables as before:
+\begin{align*}
+    v^0_j, & \quad j = 0, \dots e^0
+\end{align*}
+
+For the One-Off-Binary tree, with a vector of ternary numbers 
+\begin{align*}
+   t^1_{0} = 0, &   t^1_{j} , t \in {-1, 0, 1},  &  j = 0, \dots e^0
+\end{align*}
+
+ranges in the first row $g=1$ are
+
+\begin{align*}
+   \text{lo}( v^1_j) = 2j +t^1_j , &  \text{hi}( v^1_j) = 2j+1+t^1_(j+1)  &  \quad j = 0, \dots e^1
+\end{align*}
+
+\subsubsection*{Size limits}
+On the shift vector of on-off shifts  ${t}$, the condition
+\[
+\left| t^1_{j+1} - t^1_j \right| \le 1
+\]
+
+is imposed, meaning only item sizes of 1, 2, or 3 are allowed.  
+Items are not allowed to vanish, because this would change the
+tree topology. items of size 4 can be replaced by two pairs, which are then merged
+on the next-higher row.
+
+\subsubsection*{One-off tree properties}
+For the second row $g=2$, with its own vector of ternaries 
+
+\begin{align*}
+   t^2_{0} = 0, &   t^2_{j} , t \in {-1, 0, 1},  &  j = 0, \dots e^2
+\end{align*}
+
+ranges are
+
+\begin{align*}
+   \text{lo}( v^2_j) = \text{lo}(v^1_{2 j + t^2_j})  , &  \text{hi}( v^2_j) =\text{hi}(v^1_{2(j+1)+1+t^2_{j+1}})   &  \quad j = 0, \dots, e^2
+\end{align*}
+
+For any row $g>0$, ranges are
+
+\begin{align*}
+   \text{lo}( v^g_j) = \text{lo}(v^{g-1}_{2 j + t^g_j})  , &  \text{hi}( v^g_j) =\text{hi}(v^{g-1}_{2(j+1)+1+t^g_{j+1}})   &  \quad j = 0, \dots, e^g
+\end{align*}
+
+\begin{lemma}
+For the width of a Mergable in row $g$ of a One-Off-Binary tree all values are possible from $1$  to $ e^g$.
+\end{lemma}
+
+\begin{proof}
+(left to the reader)
+\end{proof}
+
+\subsection*{ Merge Candidates}
+
+In the binary tree, for any item, the merge is determined:
+\[
+\begin{array}{c|ccccc}
+\text{item} & v_0 & v_1 & v_2 & v_3 & v_4 \\
+\hline
+\text{merge} & m(v_0, v_1) & m(v_1, v_2) & m(v_2, v_3) & m(v_3, v_4) & m(v_4, v_5)
+\end{array}
+\]
+
+In the one-off binary tree, for any item candidate merges are generated to be processed further:
+\[
+\begin{array}{c|ccccc}
+\text{item} & v_0 & v_1 & v_2 & v_3 & v_4 \\
+\hline
+\text{candidate\_lo} &   & m(v_0, v_1) & m(v_1, v_2) & m(v_2, v_3) & m(v_3, v_4)  \\
+\text{candidate\_hi} & m(v_0, v_1) & m(v_1, v_2) & m(v_2, v_3) & m(v_3, v_4) & m(v_4, v_5)
+\end{array}
+\]
+
+\subsection*{ Merge Candidate Preference}
+
+Item $v_1$ has two candidate merges and chooses the better one (marked by "!" in the table), the same with $v_2$.
+If their choices agree, and we get a "happy couple": 
+\[
+\begin{array}{c|cc}
+\text{item}  & v_1 & v_2 \\
+\hline
+\text{candidate\_lo} & m(v_0, v_1) & m(v_1, v_2)! \\
+\text{candidate\_hi} & m(v_1, v_2)! & m(v_2, v_3) 
+\end{array}
+\]
+
+In the other case we get a "a midsummer night's dream".
+$v_1$ loves $v_2$, but $v_2$ loves $v_3$ etc. 
+\[
+\begin{array}{c|cc}
+\text{item}  & v_1 & v_2 \\
+\hline
+\text{candidate\_lo} & m(v_0, v_1) & m(v_1, v_2) \\
+\text{candidate\_hi} & m(v_1, v_2)! & m(v_2, v_3)! 
+\end{array}
+\]
+
+
+
+\subsubsection{Triples}
+Assuming for now qualities cannot be equal,
+After settling what is left beside couples are
+chains of one element, Triples. 
+A Triple is a single, attracted to one pair. 
+If it is the lower-index side, denoted as $T^{-}$:
+
+\[
+\begin{array}{c|ccccccc}
+\text{item}  & 1 & 2 & 3 & 4 & 5\\
+\hline
+\text{candidate\_lo} & (0, 1) & (1, 2)! & (2, 3)! & (3, 4)!  & (4, 5)! \\
+\text{candidate\_hi} & (1, 2)! & (2, 3) & (3, 4) & (4, 5)  & (5, 6)
+\end{array}
+\]
+
+If the pair is the upper-index side, denoted as  $T^{+}$:
+
+\[
+\begin{array}{c|ccccccc}
+\text{item}  & 1 & 2 & 3 & 4 & 5\\
+\hline
+\text{candidate\_lo} & (0, 1) & (1, 2)! & (2, 3) & (3, 4)  & (4, 5)! \\
+\text{candidate\_hi} & (1, 2)! & (2, 3) & (3, 4)! & (4, 5)!  & (5, 6)
+\end{array}
+\]
+
+After settling, a tree row $g$ consists of triples $T^\pm_{ k} , k =0...N_T, N_T < e^g/3$.
+Between triples can exist any number of Couples, or none.
+
+\subsection*{Preserving tree topology}
+We now decide what to do with pairs of Triples,  $T^{+}  T^{+}, T^{+}  T^{-} , T^{-}  T^{+}$, and $T^{-}  T^{-}$, without Couples in-between.
+Figures 1-2 recall the basic property of the One-Off Binary Tree. The boundaries between
+the $j^0$ items to be merged into $j^1$ items are allowed to move by one unit.
+
+If all $j^0$ are Couples, the case  $t^1_j = 0$, is the original Binary Tree.
+ The $j^0_j$ items are merged as in Fig. 1, or shortanhd as 
+\[
+| 0 1 |2  3| 4 5 | ... | (e^0-1)e^0 |.   
+\]
+For $t^1_j = 1$,  items are merged according to 
+\[
+ | 0 1 2 |  3 4 | 5 6 | ... | (e^0-1) | e^0 |  
+\]
+For $t^1_j = -1$,  items are merged according to
+\[
+  | 0  |  1 2 |  3 4 | ...   | (e^0-2)(e^0-1)e^0 | | 
+\]
+
+\begin{figure}[h]
+    \centering
+    \resizebox{\textwidth}{!}{\includegraphics{MergableGraph1.pdf}}
+    \caption{The base row $j_0$ and the first row $j_1$ of a One-Off-Binary-Tree with all unit shifts $t_j=0$. In each colunm, the $j_1$ item is the reult of merge of the  $j_0$ items.}
+    \label{fig:tikz_diagram}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \resizebox{\textwidth}{!}{\includegraphics{MergableGraph2.pdf}}
+    \caption{Setting $t^1_0 = 1$ means the node 2 being merged into node 0 instead of node 1.}
+    \label{fig:tikz_diagram}
+\end{figure}
+
+
+\subsubsection{Triple pairs}
+
+
+\[
+\begin{array}{c|cccccccccccc}
+  & 1 & 2 & 3 & 4 & 5& 6 & 7 & 8 & 9 & 10\\
+\hline
+& (0, 1) & (1, 2)! & (2, 3) & (3, 4)  & (4, 5)! & (5, 6) & (7, 8)! & (8, 9) & (9, 10)  & (10, 11)! \\
+ & (1, 2)! & (2, 3) & (3, 4)! & (4, 5)!  & (5, 6) & (6, 7)! & (8, 9) & (9, 10)! & (10, 11)!  & (11, 12)
+\end{array}
+\]
+
+\section*{Conclusions}
+
+The one-off binary tree demonstrates the utility of merging entities with specific properties and qualities. By defining a merge operation and constructing a binary tree, the structure supports analysis of data aggregation and quality metrics. Future work could explore extensions to other data types and applications.
+
+
+end{document}
